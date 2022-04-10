@@ -11,7 +11,7 @@ Send pushover messages from bash
 ## Installation
 
 ```bash
-wget url
+wget https://github.com/neutralvibes/pushover.git
 chmod +x pushover
 ```
 
