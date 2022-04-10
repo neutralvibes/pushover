@@ -15,7 +15,7 @@ wget https://raw.githubusercontent.com/neutralvibes/pushover/master/pushover
 chmod +x pushover
 ```
 
-Now the `pushover` file and enter your  `USER_KEY` and `APP_TOKEN`. You can also assign different sounds for the levels.
+Now edit the `pushover` file and enter your  `USER_KEY` and `APP_TOKEN`. You can also assign different sounds for the levels.
 
 There is also `HOSTNAME_IN_TITLE` which you can set to `0` to turn off appending the hostname to titles, which is on by default.
 
