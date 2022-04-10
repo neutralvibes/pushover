@@ -21,6 +21,24 @@ There is also `HOSTNAME_IN_TITLE` which you can set to `0` to turn off appending
 
 ## Usage
 
+Get command line options
+
+```bash
+./pushover
+```
+
+Prints
+
+```bash
+Usage: pushover <level> <message> [title] [path to image]
+
+  level         - Level of message to send: info|warning|error.
+                  Messages sent at level 'error' will be sent as high priority.
+
+  message       - Message to send
+  title         - Title of message (defaults to hostname)
+  image         - Path to image to attach
+```
 
 ### Send message
 
