@@ -1,0 +1,97 @@
+#!/bin/bash
+# P U S H O V E R CONFIG
+# 
+# Enter user key and generated app token below
+# More info - https://pushover.net/api#registration
+#
+
+USER_KEY=
+APP_TOKEN=
+DEVICE=
+
+#
+# Choose sounds for info, warninngs & errors
+# More info - https://pushover.net/api#sounds
+#
+SOUND_INFO='spacealarm'
+SOUND_WARNING='tugboat'
+SOUND_ERROR='alien'
+#
+HOSTNAME_IN_TITLE=1
+
+#
+# Set to 1 for formatted text
+#
+MONOSPACE=0
+
+SCRIPT_PATH="$(cd "$(dirname '$0')"; pwd -P)"
+
+if [ -z $USER_KEY ] || [ -z $APP_TOKEN ]; then
+  echo "USER_KEY and APP_TOKEN must be set in file first!"
+  exit 1
+fi
+
+usage () {
+ echo -e "
+Usage: pushover <level> <message> [title] [path to image]
+
+  level \t- Level of message to send: info|warning|error.
+  \t\t  Messages sent at level 'error' will be sent as high priority.
+
+  message \t- Message to send
+  title \t- Title of message (defaults to hostname)
+  image \t- Path to image to attach
+"
+  exit 0
+}
+
+if [ $# -lt 2 ]; then
+  usage
+fi
+
+# source $SCRIPT_PATH/.config
+
+PRIORITY=0
+if [ "$1" = 'warning' ]; then
+  SOUND=$SOUND_WARNING
+elif [ "$1" = 'info' ]; then
+  SOUND=$SOUND_INFO
+elif [ "$1" = 'error' ]; then
+  SOUND=$SOUND_ERROR
+  PRIORITY=1
+else
+  echo -e "ERROR: Unrecognised message level, $1. Support [info|warning|error]"
+  exit 1
+fi
+
+MESSAGE=$2
+TITLE=$3
+
+[ $HOSTNAME_IN_TITLE -eq 1 ] && HNAME=$HOSTNAME || HNAME=""
+
+if [ $# -lt 3 ]; then
+    TITLE="${HOSTNAME}"
+else
+    TITLE="${HNAME}: $TITLE"
+    
+fi
+
+TIMESTAMP=`date +%s`
+
+IMAGE_PARAM=""
+fn=${@: 4}
+
+[[ ! -z "$4" ]] && IMAGE_PARAM="-F attachment=@"
+set -x
+  curl -s \
+    --form-string "token=${APP_TOKEN}" \
+    --form-string "user=${USER_KEY}" \
+    --form-string "sound=${SOUND}" \
+    --form-string "title=${TITLE}" \
+    --form-string "message=${MESSAGE}" \
+    --form-string "device=${DEVICE}" \
+    --form-string "monospace=$MONOSPACE" \
+    --form-string "priority=${PRIORITY}" \
+    --form-string "timestamp=${TIMESTAMP}" \
+    ${IMAGE_PARAM}"${fn}" \
+    https://api.pushover.net/1/messages.json > /dev/null
