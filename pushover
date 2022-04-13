@@ -82,16 +82,16 @@ IMAGE_PARAM=""
 fn=${@: 4}
 
 [[ ! -z "$4" ]] && IMAGE_PARAM="-F attachment=@"
-set -x
-  curl -s \
-    --form-string "token=${APP_TOKEN}" \
-    --form-string "user=${USER_KEY}" \
-    --form-string "sound=${SOUND}" \
-    --form-string "title=${TITLE}" \
-    --form-string "message=${MESSAGE}" \
-    --form-string "device=${DEVICE}" \
-    --form-string "monospace=$MONOSPACE" \
-    --form-string "priority=${PRIORITY}" \
-    --form-string "timestamp=${TIMESTAMP}" \
-    ${IMAGE_PARAM}"${fn}" \
-    https://api.pushover.net/1/messages.json > /dev/null
+
+curl -s \
+  --form-string "token=${APP_TOKEN}" \
+  --form-string "user=${USER_KEY}" \
+  --form-string "sound=${SOUND}" \
+  --form-string "title=${TITLE}" \
+  --form-string "message=${MESSAGE}" \
+  --form-string "device=${DEVICE}" \
+  --form-string "monospace=$MONOSPACE" \
+  --form-string "priority=${PRIORITY}" \
+  --form-string "timestamp=${TIMESTAMP}" \
+  ${IMAGE_PARAM}"${fn}" \
+  https://api.pushover.net/1/messages.json > /dev/null
